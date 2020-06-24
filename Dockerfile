@@ -1,6 +1,6 @@
 FROM alpine:latest
  
-MAINTAINER cloudXLR8R.com
+MAINTAINER github.com/cloudxlr8r
 
 RUN apk update && apk add curl jq libc6-compat go bash \
     && wget $(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4) -O /usr/local/bin/yq \
