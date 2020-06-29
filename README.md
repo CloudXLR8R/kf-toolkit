@@ -1,6 +1,7 @@
 # Kubeflow Toolkit 
 ### Status
-[![CircleCI](https://circleci.com/gh/cloudxlr8r/kf-toolkit.svg?style=svg)](https://circleci.com/gh/cloudxlr8r/kf-toolkit)
+
+[![CircleCI](https://circleci.com/gh/CloudXLR8R/kf-toolkit.svg?style=svg)](https://circleci.com/gh/CloudXLR8R/kf-toolkit)
 
 A prebaked image containing useful tools for Kubeflow such as -
 
