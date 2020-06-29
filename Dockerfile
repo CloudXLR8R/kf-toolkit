@@ -1,5 +1,5 @@
 FROM alpine:latest
- 
+
 MAINTAINER github.com/cloudxlr8r
 
 RUN apk update && apk add curl jq libc6-compat go bash \
@@ -7,14 +7,14 @@ RUN apk update && apk add curl jq libc6-compat go bash \
     && chmod +x /usr/local/bin/yq
 
 # install eksctl
-ENV DOWNLOAD_URL_EKSCTL="https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" 
+ENV DOWNLOAD_URL_EKSCTL="https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz"
 RUN curl --location --retry 5  "$DOWNLOAD_URL_EKSCTL" -o eksctl_download.tar.gz \
     && tar xzvf eksctl_download.tar.gz && rm eksctl_download.tar.gz \
     && chmod +x ./eksctl && mv ./eksctl /usr/local/bin/
 
 RUN echo "==>" && eksctl version
 
-# install aws-iam-authenticator 
+# install aws-iam-authenticator
 # https://api.github.com/repos/kubernetes-sigs/aws-iam-authenticator/releases/latest --
 ENV DOWNLOAD_URL_IAM="https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.0/aws-iam-authenticator_0.5.0_linux_amd64"
 RUN curl -sL -o aws-iam-authenticator "$DOWNLOAD_URL_IAM" \
@@ -49,9 +49,16 @@ RUN echo "==>" &&  kfctl version
 
 # Add awscli and kfp for @soulmaniqbal
 RUN apk --no-cache update && \
-    apk --no-cache add py3-pip && \
-    pip3 --no-cache-dir install awscli kfp && \
+    apk --no-cache add py3-pip python3 && \
+    pip3 --no-cache-dir install awscli && \
     rm -rf /var/cache/apk/*
+
+RUN curl -sLO https://github.com/CloudXLR8R/pipelines/archive/master.zip && \
+    unzip master.zip && \
+    cd pipelines-master/sdk/python && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    ./build.sh && \
+    pip3 install kfp.tar.gz
 
 RUN echo "==>" && aws --version
 
