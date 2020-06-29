@@ -50,13 +50,13 @@ RUN echo "==>" &&  kfctl version
 # Add awscli and kfp for @soulmaniqbal
 RUN apk --no-cache update && \
     apk --no-cache add py3-pip && \
-    pip3 --no-cache-dir install awscli kfp && \
+    pip3 --no-cache-dir install awscli && \
     rm -rf /var/cache/apk/*
 
 RUN curl -sLO https://github.com/CloudXLR8R/pipelines/archive/master.zip && \
     unzip master.zip && \
-    cd pipelines-master/sdk/python$ && \
-    ./build.sh && pip install kfp.tar.gz
+    cd pipelines-master/sdk/python && \
+    ./build.sh && pip3 install kfp.tar.gz
 
 RUN echo "==>" && aws --version
 
