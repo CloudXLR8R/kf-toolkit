@@ -1,6 +1,7 @@
 FROM alpine:latest
 
-MAINTAINER github.com/cloudxlr8r
+# https://docs.docker.com/engine/reference/builder/#maintainer-deprecated
+LABEL MAINTAINER github.com/cloudxlr8r
 
 RUN apk update && apk add curl jq libc6-compat go bash \
     && wget $(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4) -O /usr/local/bin/yq \
@@ -32,7 +33,8 @@ RUN GO111MODULE=on go get sigs.k8s.io/kustomize/kustomize/v3@v3.2.3
 RUN echo "==>" && kustomize version
 
 # install kubectl
-ENV KUBECTL_VERSION=1.18.0
+# KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+ENV KUBECTL_VERSION=1.18.5
 RUN curl -sLO https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl
