@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   package:
     working_directory: ~/app
@@ -27,12 +28,11 @@ jobs:
             fi
             docker images && docker push $DOCKERHUB_ID/kf-toolkit:$TAG && docker push cloudxlr8r/kf-toolkit:latest
 
-
 workflows:
   build-pipeline:
     jobs:
       - package:
-          name: pacakge-master
+          name: package-master
           context: org.cloudxlr8r.dockerhub
           filters:
             branches:
