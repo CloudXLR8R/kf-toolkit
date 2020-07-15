@@ -33,13 +33,14 @@ workflows:
   build-pipeline:
     jobs:
       - package:
+          name: pacakge-master
           context: org.cloudxlr8r.dockerhub
           filters:
             branches:
               only:
                 - master
       - package:
-          name: tag
+          name: package-tag
           context: org.cloudxlr8r.dockerhub
           filters:
             tags:
