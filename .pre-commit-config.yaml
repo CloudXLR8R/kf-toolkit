@@ -1,0 +1,26 @@
+repos:
+  - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: detect-private-key
+      # - id: check-docstring-first
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
+      - id: detect-private-key
+      # - id: detect-aws-credentials
+      - id: forbid-new-submodules
+      - id: trailing-whitespace
+      - id: check-yaml
+        exclude: template.yaml
+      - id: check-xml
+      - id: check-json
+        exclude: .vscode
+      - id: check-ast
+
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.16
+    hooks:
+      - id: circleci-config-validate
+      - id: forbid-binary
+      - id: shellcheck

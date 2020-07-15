@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kf-toolkit 
+  name: kf-toolkit
 spec:
   containers:
   - name: kf-toolkit
