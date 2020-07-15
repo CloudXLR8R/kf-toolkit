@@ -52,7 +52,9 @@ RUN echo "==>" &&  kfctl version
 # Add awscli and kfp for @soulmaniqbal
 RUN apk --no-cache update && \
     apk --no-cache add py3-pip python3 && \
-    pip3 --no-cache-dir install awscli kfp@0.5.1 kfputils@0.2.1 && \
+    pip3 --no-cache-dir install awscli && \
+    pip3 --no-cache-dir install -Iv kfputils==0.2.1 && \
+    pip3 --no-cache-dir install -Iv kfp==0.5.1 && \
     rm -rf /var/cache/apk/*
 
 # RUN curl -sLO https://github.com/CloudXLR8R/pipelines/archive/master.zip && \
