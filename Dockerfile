@@ -52,7 +52,7 @@ RUN echo "==>" &&  kfctl version
 # Add awscli and kfp for @soulmaniqbal
 RUN apk --no-cache update && \
     apk --no-cache add py3-pip python3 && \
-    pip3 --no-cache-dir install awscli && \
+    pip3 --no-cache-dir install awscli j2cli[yaml] && \
     pip3 --no-cache-dir install -Iv kfputils==0.2.1 && \
     pip3 --no-cache-dir install -Iv kfp==0.5.1 && \
     rm -rf /var/cache/apk/*
