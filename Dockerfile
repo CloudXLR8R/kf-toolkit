@@ -49,12 +49,12 @@ RUN curl -sLO "https://github.com/kubeflow/kfctl/releases/download/v1.0.2/kfctl_
 
 RUN echo "==>" &&  kfctl version
 
-# Add awscli and kfp for @soulmaniqbal
+    # pip3 --no-cache-dir install -Iv kfputils==0.2.1 && \
+    # pip3 --no-cache-dir install -Iv kfp==0.5.1 && \
+    # pip3 --no-cache-dir install -Iv kfp==1.0.3 && \
 RUN apk --no-cache update && \
     apk --no-cache add py3-pip python3 && \
     pip3 --no-cache-dir install awscli j2cli[yaml] && \
-    pip3 --no-cache-dir install -Iv kfputils==0.2.1 && \
-    pip3 --no-cache-dir install -Iv kfp==0.5.1 && \
     rm -rf /var/cache/apk/*
 
 # RUN curl -sLO https://github.com/CloudXLR8R/pipelines/archive/master.zip && \
