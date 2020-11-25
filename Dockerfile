@@ -42,9 +42,9 @@ RUN curl -sLO https://storage.googleapis.com/kubernetes-release/release/v${KUBEC
 RUN echo "==>" && kubectl version --client
 
 # TODO Fix versioning on next release. Note: libc6-compat required to run kfctl on alpine see https://github.com/kubeflow/kfctl/issues/333
-ENV KFCTL_VERSION=1.0.2
-RUN curl -sLO "https://github.com/kubeflow/kfctl/releases/download/v1.0.2/kfctl_v1.0.2-0-ga476281_linux.tar.gz" \
-    && tar xvf kfctl_v1.0.2-0-ga476281_linux.tar.gz && chmod +x kfctl \
+ENV KFCTL_VERSION=1.2.0
+RUN curl -sLO "https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz" \
+    && tar xvf kfctl_v1.2.0-0-gbc038f9_linux.tar.gz && chmod +x kfctl \
     && mv kfctl /usr/local/bin/kfctl
 
 RUN echo "==>" &&  kfctl version
