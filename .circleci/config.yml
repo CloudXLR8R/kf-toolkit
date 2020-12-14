@@ -55,6 +55,8 @@ jobs:
       # https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html?icmpid=docs_ecr_hp_registry_settings
       # When authenticating to a public registry, always authenticate to the us-east-1 Region when using the AWS CLI.
       AWS_DEFAULT_REGION: us-east-1
+      DOCKER_REPO: cloudxlr8r/<< parameters.repo >>
+      ECR_REPO: public.ecr.aws/<< parameters.ecr_public_registry_id >>/<< parameters.repo >>
     steps:
       - checkout
       - setup_remote_docker
@@ -65,7 +67,11 @@ jobs:
             if [[ -z $TAG ]]; then
               TAG=$CIRCLE_SHA1
             fi
-            docker build -t cloudxlr8r/<< parameters.repo >>:$TAG -t cloudxlr8r/<< parameters.repo >>:latest << parameters.ecr_public_registry_id >>/<< parameters.repo >>:$TAG -t << parameters.ecr_public_registry_id >>/<< parameters.repo >>:latest .
+
+            docker build -t $DOCKER_REPO:$TAG .
+            docker tag "$DOCKER_REPO:$TAG" "$DOCKER_REPO:latest"
+            docker tag "$DOCKER_REPO:$TAG" "$ECR_REPO:$TAG"
+            docker tag "$DOCKER_REPO:$TAG" "$ECR_REPO:latest"
       - when:
           condition:
             equal: ["aws", << parameters.registry >>]
@@ -87,7 +93,7 @@ jobs:
                   if [[ -z $TAG ]]; then
                     TAG=$CIRCLE_SHA1
                   fi
-                  docker images && docker push public.ecr.aws/<< parameters.ecr_public_registry_id >>/<< parameters.repo >>:$TAG && docker push public.ecr.aws/<< parameters.ecr_public_registry_id >>/<< parameters.repo >>:latest
+                  docker images && docker push "$ECR_REPO:$TAG" && docker push "$ECR_REPO:latest"
       - when:
           condition:
             equal: ["dockerhub", << parameters.registry >>]
