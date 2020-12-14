@@ -85,7 +85,7 @@ jobs:
             - run:
                 name: AWS ECR create public repo
                 command: |
-                  aws ecr-public describe-repositories --repository-names "<< parameters.repo >>" >/dev/null 2>&1 || aws ecr-public create-repository --region --repository-name "<< parameters.repo >>"
+                  aws ecr-public describe-repositories --repository-names "<< parameters.repo >>" >/dev/null 2>&1 || aws ecr-public create-repository --repository-name "<< parameters.repo >>"
             - run:
                 name: Publish container to AWS ECR if tagged commit
                 command: |
