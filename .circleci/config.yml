@@ -68,7 +68,7 @@ jobs:
             docker build -t cloudxlr8r/<< parameters.repo >>:$TAG -t cloudxlr8r/<< parameters.repo >>:latest << parameters.ecr_public_registry_id >>/<< parameters.repo >>:$TAG -t << parameters.ecr_public_registry_id >>/<< parameters.repo >>:latest .
       - when:
           condition:
-            equal: [ "aws", << parameters.registry >> ]
+            equal: ["aws", << parameters.registry >>]
           steps:
             - aws-cli/setup
             - run:
@@ -90,7 +90,7 @@ jobs:
                   docker images && docker push public.ecr.aws/<< parameters.ecr_public_registry_id >>/<< parameters.repo >>:$TAG && docker push public.ecr.aws/<< parameters.ecr_public_registry_id >>/<< parameters.repo >>:latest
       - when:
           condition:
-            equal: [ "dockerhub", << parameters.registry >> ]
+            equal: ["dockerhub", << parameters.registry >>]
           steps:
             - run:
                 name: DockerHub login
@@ -141,8 +141,8 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-            branches:
-              ignore: /.*/
+            # branches:
+            #   ignore: /.*/
           requires:
             - lint
       # - aws-ecr/build-and-push-image:
