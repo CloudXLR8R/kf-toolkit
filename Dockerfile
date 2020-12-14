@@ -49,11 +49,11 @@ RUN curl -sLO "https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_
 
 RUN echo "==>" &&  kfctl version
 
-    # pip3 --no-cache-dir install -Iv kfputils==0.2.1 && \
     #  gpgme-dev
 RUN apk --no-cache update && \
     apk --no-cache add git make bash py3-pip python3 python3-dev python2-dev libc-dev libffi-dev musl-dev linux-headers && \
     pip3 --no-cache-dir install -Iv kfp==1.1.2 && \
+    pip3 --no-cache-dir install -Iv kfputils==0.3.0 && \
     pip3 --no-cache-dir install awscli j2cli[yaml] && \
     rm -rf /var/cache/apk/*
 
