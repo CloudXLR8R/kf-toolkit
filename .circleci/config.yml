@@ -1,10 +1,48 @@
 version: 2.1
+orbs:
+  python: circleci/python@1.2.1
+  shellcheck: circleci/shellcheck@2.2.2
+
+commands:
+  setup_precommit_hooks:
+    description: Restore pre-commit hooks from cache
+    steps:
+      - restore_cache:
+          keys:
+            - v3-pre-commit-hooks-{{ checksum ".pre-commit-config.yaml" }}
+      - run:
+          name: Install pre-commit hooks
+          command: pre-commit install
+  save_precommit_hooks:
+    description: Save the installed pre-commit hooks to the cache
+    steps:
+      - save_cache:
+          key: v3-pre-commit-hooks-{{ checksum ".pre-commit-config.yaml" }}
+          paths:
+            - "~/.cache/pre-commit"
 
 jobs:
+  lint:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - save_precommit_hooks
+      - setup_precommit_hooks
+      - shellcheck/install
+      - run: pre-commit run --all-files --verbose --config .pre-commit-config.yaml
+
   package:
     working_directory: ~/app
     docker:
       - image: docker:17.09.0-ce-dind
+    parameters:
+      repo:
+        type: string
+        description: repo name to create in registry (usually same as github repo name)
+    environment:
+      DOCKER_REPO: cloudxlr8r/<< parameters.repo >>
     steps:
       - checkout
       - setup_remote_docker
@@ -15,34 +53,42 @@ jobs:
             if [[ -z $TAG ]]; then
               TAG=$CIRCLE_SHA1
             fi
-            docker build -t cloudxlr8r/kf-toolkit:$TAG -t cloudxlr8r/kf-toolkit:latest .
+            docker build -t $DOCKER_REPO:$TAG .
+            docker tag "$DOCKER_REPO:$TAG" "$DOCKER_REPO:latest"
       - run:
           name: DockerHub login
           command: echo $DOCKERHUB_PWD | docker login --username $DOCKERHUB_ID --password-stdin
       - run:
-          name: Publish container to DockerHub
+          name: Publish container to DockerHub if tagged commit
           command: |
             TAG=$CIRCLE_TAG
             if [[ -z $TAG ]]; then
               TAG=$CIRCLE_SHA1
             fi
-            docker images && docker push $DOCKERHUB_ID/kf-toolkit:$TAG && docker push cloudxlr8r/kf-toolkit:latest
+            docker images && docker push $DOCKERHUB_ID/<< parameters.repo >>:$TAG && docker push $DOCKER_REPO:latest
 
 workflows:
   build-pipeline:
     jobs:
+      - lint
       - package:
           name: package-master
+          repo: kf-toolkit
           context: org.cloudxlr8r.dockerhub
           filters:
             branches:
               only:
                 - master
+          requires:
+            - lint
       - package:
-          name: package-tag
+          name: package-tag-dockerhub
+          repo: kf-toolkit
           context: org.cloudxlr8r.dockerhub
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
+          requires:
+            - lint
