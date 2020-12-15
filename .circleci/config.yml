@@ -71,7 +71,8 @@ jobs:
 workflows:
   build-pipeline:
     jobs:
-      - lint
+      - lint:
+          name: lint-master
       - package:
           name: package-master
           repo: kf-toolkit
@@ -81,9 +82,11 @@ workflows:
               only:
                 - master
           requires:
-            - lint
+            - lint-master
+      - lint:
+          name: lint-tag
       - package:
-          name: package-tag-dockerhub
+          name: package-tag
           repo: kf-toolkit
           context: org.cloudxlr8r.dockerhub
           filters:
@@ -92,4 +95,4 @@ workflows:
             branches:
               ignore: /.*/
           requires:
-            - lint
+            - lint-tag
