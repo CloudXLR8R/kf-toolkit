@@ -85,6 +85,11 @@ workflows:
             - lint-master
       - lint:
           name: lint-tag
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - package:
           name: package-tag
           repo: kf-toolkit
